@@ -16,7 +16,7 @@ void detect_gpu()
         double a[100], b[100];
         #pragma acc parallel loop
         for (int i = 0; i < 100; ++i) {
-                if (i%10 == 0) {
+                if (i == 10) {
                         if (acc_on_device(acc_device_not_host))
                                 printf("Executing on GPU.\n");
                         else
@@ -41,12 +41,9 @@ int main() {
     // and explicitly handle data movement
     #pragma acc data copyin(pa[0:n], pb[0:n]) copyout(pc[0:n])
     {
-	while (true) {
-		#pragma acc parallel loop
-	        for(int i = 0; i < n; ++i) {
-			pc[i] = pa[i] + pb[i];
-		}
-	}
+	#pragma acc parallel loop
+        for(int i = 0; i < n; ++i)
+		pc[i] = pa[i] + pb[i];
     }
 
     // Display the first 10 results
